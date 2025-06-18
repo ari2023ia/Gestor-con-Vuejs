@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: "TaskList",
     data() {
@@ -27,11 +29,23 @@ export default {
     },
     methods: {
         // Llamada para obtener las tareas desde la API externa
-        fetchTasks() {
+        async fetchTasks() {
             // Aquí deberían realizar la solicitud a la API usando axios o fetch.
             // La URL que usaremos es: https://dummyjson.com/todos
-
+            try {
+                const response = await axios.get("https://dummyjson.com/todos");
+                this.task = response.data;
+                for (const task of this.task.todos)
+                    this.tasks.push ({
+                        todo: task.todo,
+                        id: task.id,
+                        completed: task.completed
+                    });
+                }
             // Sugerencia: Intentar implementarlo con axios o fetch
+                catch (error) {
+                    console.error('Error fetching tasks:', error);
+                }
         },
 
         // Cambiar el estado de una tarea (completada/no completada)
